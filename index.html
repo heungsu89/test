@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Document</title>
+    <script src="jquery-3.1.1.min.js"></script>
+    <style>
+        .img>div img{
+            width:80px;
+            height:80px;
+        }
+        .img>div>div{
+            display:inline-block;
+            width:80px;
+            height:80px;
+            background:#ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>하이aaa</h1>
+    <div class="img"> </div>
+    <input multiple="multiple" type="file" id="file" name="file[]">
+    <script>
+        var fileValue = document.getElementById('file');
+        var maxSize  = 31457280   //30MB
+      //  var fielSize = Math.round(fileValue.fileSize);
+        console.log(fileValue.value)
+        $('#file').change(function(){
+            var t = this;   
+            for(var i = 0;i<fileValue.files.length;i++){
+                var size = fileValue.files[i].size;
+
+                if(size > maxSize){
+                   console.log(fileValue.files[i].name+'용량초과')
+                }else{
+                    var src = getFileType(fileValue.files[i].name)
+                    if(src.toLowerCase() == "jpg" || src.toLowerCase() == "gif" || src.toLowerCase() == "png" || src.toLowerCase() == "jpeg"){
+                        console.log(fileValue.files[i].name+'/이미지');
+                        
+                         readURL(t,i)
+                    }else{
+                        console.log(fileValue.files[i].name+'/파일');
+                        $('.img').append('<div><div></div><span>'+fileValue.files[i].name+'</span></div>')
+                    }
+                   
+                     
+                   
+                }
+            }
+        });
+        
+        function readURL(input,i) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                    $('.img').append('<div><img src="'+e.target.result+'" alt="asdads"><span>'+fileValue.files[i].name+'</span></div>')
+                }
+
+              reader.readAsDataURL(input.files[i]);
+        }
+            //◈◈ 파일 확장자 확인 ◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈◈
+        function getFileType(filePath){
+            var index = -1;
+                index = filePath.lastIndexOf('.');
+            var type = "";
+            if(index != -1)
+            {
+                type = filePath.substring(index+1, filePath.len);
+            }else{
+                type = "";
+            }
+            return type;
+        }
+    </script>
+</body>
+</html>
